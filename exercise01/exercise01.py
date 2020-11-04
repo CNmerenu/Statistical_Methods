@@ -1,3 +1,11 @@
+"""
+This file solves the first exercise in statistical methods.
+To run this file, follow these steps:
+1. Make sure every dependency is installed via `pip install -r requirements.txt`
+   You can use the `--user` flag to install these packages for your account only.
+2. Make sure the `soilrespiration.csv` is in the same directory as this file.
+3. Change into the directory of this file and run `python exercise01.py`
+"""
 import matplotlib.pyplot as plt
 import numpy as np
 from pandas import read_csv
