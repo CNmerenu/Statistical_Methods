@@ -53,3 +53,14 @@ if __name__ == "__main__":
         cost=square_error,
     )
     print(f"β1≈{round(β1_estim, 3)}, β2≈{round(β2_estim, 3)}")
+
+    # Task 2
+    X = np.column_stack(
+        (np.ones(soil_resp_dataframe.temp.size), soil_resp_dataframe.temp)
+    )
+    β_estim = np.array([β1_estim, β2_estim])
+
+    # @ is the symbol for matrix multiplication
+    Xβ = X @ β_estim
+    XX = X.T @ X
+    XX_inv = np.linalg.inv(XX)
