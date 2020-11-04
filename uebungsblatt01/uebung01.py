@@ -1,5 +1,6 @@
-from pandas import read_csv
+import matplotlib.pyplot as plt
 import numpy as np
+from pandas import read_csv
 
 
 def linear_estimation(x, β1, β2):
@@ -43,8 +44,15 @@ def square_error(y, y_):
 
 
 if __name__ == "__main__":
-    # Task 1
+    # read the data and display it
     soil_resp_dataframe = read_csv("soilrespiration.csv")
+    plt.scatter(soil_resp_dataframe.temp, soil_resp_dataframe.resp, color="k")
+    plt.xlabel("Temperatur")
+    plt.ylabel("log. Bodenatmung")
+    legend = []  # following estimations add their title to this list
+
+    # Task 1
+    legend.append("quadratisch")
     β1_estim, β2_estim = estimate_params_with_grid(
         x=soil_resp_dataframe.temp,
         y=soil_resp_dataframe.resp,
@@ -53,6 +61,10 @@ if __name__ == "__main__":
         cost=square_error,
     )
     print(f"β1≈{round(β1_estim, 3)}, β2≈{round(β2_estim, 3)}")
+    plt.plot(
+        soil_resp_dataframe.temp,
+        linear_estimation(soil_resp_dataframe.temp, β1_estim, β2_estim),
+    )
 
     # Task 2
     X = np.column_stack(
@@ -64,3 +76,7 @@ if __name__ == "__main__":
     Xβ = X @ β_estim
     XX = X.T @ X
     XX_inv = np.linalg.inv(XX)
+
+    legend.append("Rohdaten")
+    plt.legend(legend)
+    plt.show()
