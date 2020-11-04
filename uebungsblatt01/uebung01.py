@@ -43,6 +43,20 @@ def square_error(y, y_):
     return ((y - y_) ** 2).sum()
 
 
+def abs_error(y, y_):
+    """
+    Computes the absolute error of an estimation y_ off the real data y.
+    """
+    return np.abs(y - y_).sum()
+
+
+def quartic_error(y, y_):
+    """
+    Computes the quartic error of an estimation y_ off the real data y.
+    """
+    return ((y - y_) ** 4).sum()
+
+
 if __name__ == "__main__":
     # read the data and display it
     soil_resp_dataframe = read_csv("soilrespiration.csv")
@@ -76,6 +90,35 @@ if __name__ == "__main__":
     Xβ = X @ β_estim
     XX = X.T @ X
     XX_inv = np.linalg.inv(XX)
+
+    # Task 3
+    legend.append("absolut")
+    β1_estim, β2_estim = estimate_params_with_grid(
+        x=soil_resp_dataframe.temp,
+        y=soil_resp_dataframe.resp,
+        β1_range=np.linspace(-1, 0, num=100),
+        β2_range=np.linspace(0, 1, num=100),
+        cost=abs_error,
+    )
+    plt.plot(
+        soil_resp_dataframe.temp,
+        linear_estimation(soil_resp_dataframe.temp, β1_estim, β2_estim),
+    )
+    print(f"β1≈{round(β1_estim, 3)}, β2≈{round(β2_estim, 3)}")
+
+    legend.append("quartisch")
+    β1_estim, β2_estim = estimate_params_with_grid(
+        x=soil_resp_dataframe.temp,
+        y=soil_resp_dataframe.resp,
+        β1_range=np.linspace(-1, 0, num=100),
+        β2_range=np.linspace(0, 1, num=100),
+        cost=quartic_error,
+    )
+    plt.plot(
+        soil_resp_dataframe.temp,
+        linear_estimation(soil_resp_dataframe.temp, β1_estim, β2_estim),
+    )
+    print(f"β1≈{round(β1_estim, 3)}, β2≈{round(β2_estim, 3)}")
 
     legend.append("Rohdaten")
     plt.legend(legend)
